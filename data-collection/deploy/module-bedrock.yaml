@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Amazon Bedrock model invocation logs - Pull-based Data Collection v3.14.8
+Description: Amazon Bedrock model invocation logs - Pull-based Data Collection v3.14.11
 Transform: 'AWS::LanguageExtensions'
 Metadata:
   cfn_nag:

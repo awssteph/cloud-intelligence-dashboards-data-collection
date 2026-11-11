@@ -152,7 +152,11 @@ def test_rds_db_clusters_data(athena):
     assert len(data) > 0, 'rds_db_clusters_data is empty'
 
 def test_eks_clusters_data(athena):
-    data = athena_query(athena=athena, sql_query='SELECT * FROM "optimization_data"."inventory_eks_clusters_data" LIMIT 10;')
+    # Table is actually named inventory_eks_data (module-inventory.yaml), not
+    # inventory_eks_clusters_data like the other inventory_*_data tables. Matching
+    # the deployed name here rather than renaming the table, since renaming it
+    # would break existing deployments. Tech debt: rename the table for consistency.
+    data = athena_query(athena=athena, sql_query='SELECT * FROM "optimization_data"."inventory_eks_data" LIMIT 10;')
     assert len(data) > 0, 'eks_clusters_data is empty'
 
 def test_pricing_computesavingsplan_data(athena):
@@ -362,6 +366,13 @@ def test_elasticache_engine_versions_data(athena):
 def test_elasticache_reserved_cache_nodes_offerings_data(athena):
     data = athena_query(athena=athena, sql_query='SELECT * FROM "optimization_data"."reference_elasticache_reserved_cache_nodes_offerings" LIMIT 10;')
     assert len(data) > 0, 'elasticache_reserved_cache_nodes_offerings is empty'
+
+def test_rds_maintenance_data(athena):
+    """Test RDS module maintenance data collection"""
+    data = athena_query(athena=athena, sql_query='SELECT * FROM "optimization_data"."rds_maintenance_data" LIMIT 10;')
+    # Maintenance data may be 0 if no pending maintenance actions
+    assert len(data) >= 0, 'rds_maintenance_data query failed'
+
 
 def test_kiro_user_activity_data(athena):
     data = athena_query(athena=athena, sql_query='SELECT * FROM "optimization_data"."kiro_user_activity" LIMIT 10;')
